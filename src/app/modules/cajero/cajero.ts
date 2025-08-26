@@ -35,9 +35,6 @@ export class Cajero implements OnInit {
 
   // Método para cerrar sesión
   cerrarSesion(): void {
-    if (confirm('¿Está seguro que desea cerrar sesión?')) {
-      console.log('Cerrando sesión...');
-      this.router.navigate(['/login']); 
-    }
+    this.router.navigate(['/']);
   }
 }
