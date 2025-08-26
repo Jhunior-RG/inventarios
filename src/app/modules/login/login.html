@@ -1,1 +1,84 @@
-<p>login works!</p>
+<div class="w-full max-w-md mx-auto mt-12 p-8 bg-white rounded-3xl shadow-2xl backdrop-blur-sm">
+  <!-- Header -->
+  <div class="text-center mb-8">
+    <div class="flex items-center justify-center mb-4">
+      <div class="bg-green-600 p-5 rounded-full shadow-lg">
+        <i class="fa-solid fa-pills text-white text-3xl"></i>
+      </div>
+    </div>
+    <h2 class="text-3xl font-extrabold text-gray-800">FARMAPRO</h2>
+    <p class="text-gray-500 mt-2">Sistema de Gestión Farmacéutica</p>
+  </div>
+
+  <!-- Formulario -->
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-5">
+    <!-- Email -->
+    <div>
+      <label for="email" class="block text-sm font-medium text-gray-700">Correo Electrónico</label>
+      <input
+        id="email"
+        type="email"
+        placeholder="farmaceutico@farmapro.com"
+        formControlName="email"
+        required
+        class="mt-1 block w-full h-12 rounded-xl border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
+      />
+    </div>
+
+    <!-- Password -->
+    <div>
+      <label for="password" class="block text-sm font-medium text-gray-700">Contraseña</label>
+      <div class="relative mt-1">
+        <input
+          id="password"
+          [type]="showPassword ? 'text' : 'password'"
+          placeholder="••••••••"
+          formControlName="password"
+          required
+          class="block w-full h-12 pr-12 rounded-xl border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
+        />
+        <button
+          type="button"
+          (click)="togglePassword()"
+          class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+        >
+          <i *ngIf="showPassword" class="fa-solid fa-eye-slash"></i>
+          <i *ngIf="!showPassword" class="fa-solid fa-eye"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Opciones -->
+    <div class="flex items-center justify-between text-sm">
+      <label class="flex items-center space-x-2 cursor-pointer">
+        <input type="checkbox" formControlName="remember" class="rounded border-gray-300 text-green-600 focus:ring-green-500" />
+        <span class="text-gray-600">Recordarme</span>
+      </label>
+      <a href="#" class="text-green-600 hover:text-green-700 font-medium">
+        ¿Olvidaste tu contraseña?
+      </a>
+    </div>
+
+    <!-- Botón -->
+    <button
+      type="submit"
+      [disabled]="isLoading"
+      class="w-full h-12 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-xl flex items-center justify-center space-x-2"
+    >
+      <ng-container *ngIf="isLoading; else normalBtn">
+        <div class="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+        <span>Iniciando sesión...</span>
+      </ng-container>
+      <ng-template #normalBtn>
+        <i class="fa-solid fa-shield-halved"></i>
+        <span>Iniciar Sesión</span>
+      </ng-template>
+    </button>
+  </form>
+
+  <!-- Footer -->
+  <div class="mt-8 pt-6 border-t border-gray-200 text-center text-sm text-gray-500">
+    <p>Sistema seguro para profesionales farmacéuticos</p>
+    <p class="mt-1">© 2025 FARMAPRO - Todos los derechos reservados</p>
+  </div>
+</div>

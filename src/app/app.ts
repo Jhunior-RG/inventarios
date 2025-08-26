@@ -1,4 +1,4 @@
-import { Component, NgModule, signal } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { LucideAngularModule, PenIcon } from "lucide-angular";
 
