@@ -1,4 +1,4 @@
-<!-- catalogo.html (template del catálogo de farmacia) -->
+<!-- catalogo.component.html -->
 <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
   <!-- Header -->
   <header class="bg-white shadow-sm border-b border-gray-200">
@@ -38,13 +38,15 @@
     </div>
   </header>
 
-  <!-- Filters and Search Section -->
+  <!-- Search and Filter Toggle Section -->
   <div class="px-6 py-6">
     <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+      
+      <!-- Main Search Bar and Filter Toggle -->
+      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-4">
         
         <!-- Search Bar -->
-        <div class="lg:col-span-4">
+        <div class="flex-1 lg:max-w-md">
           <label class="block text-sm font-medium text-gray-700 mb-2">Buscar Medicamento</label>
           <div class="relative">
             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -54,6 +56,7 @@
             </div>
             <input 
               type="text" 
+              id="busqueda"
               [(ngModel)]="filtros.busqueda"
               (input)="aplicarFiltros()"
               placeholder="Nombre, código, principio activo..."
@@ -61,132 +64,168 @@
           </div>
         </div>
 
-        <!-- Provider Filter -->
-        <div class="lg:col-span-2">
-          <label class="block text-sm font-medium text-gray-700 mb-2">Proveedor</label>
-          <select 
-            [(ngModel)]="filtros.proveedor"
-            (change)="aplicarFiltros()"
-            class="block w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-            <option value="">Todos</option>
-            <option *ngFor="let proveedor of proveedores" [value]="proveedor">{{ proveedor }}</option>
-          </select>
+        <!-- Filter Toggle Button -->
+        <div class="flex items-end">
+          <button 
+            (click)="toggleFiltros()"
+            id="filtros-toggle"
+            class="inline-flex items-center px-4 py-2 bg-slate-100 text-slate-700 text-sm font-medium rounded-lg hover:bg-slate-200 transition-all duration-200 border border-slate-300">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.207A1 1 0 013 6.5V4z"></path>
+            </svg>
+            <span id="filtros-text">{{ filtrosAbiertos ? 'Ocultar Filtros' : 'Mostrar Filtros' }}</span>
+            <svg id="filtros-chevron" class="w-4 h-4 ml-2 transform transition-transform duration-200" 
+                 [class.rotate-180]="filtrosAbiertos" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
         </div>
-
-        <!-- Industry Filter -->
-        <div class="lg:col-span-2">
-          <label class="block text-sm font-medium text-gray-700 mb-2">Industria</label>
-          <select 
-            [(ngModel)]="filtros.industria"
-            (change)="aplicarFiltros()"
-            class="block w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-            <option value="">Todas</option>
-            <option *ngFor="let industria of industrias" [value]="industria">{{ industria }}</option>
-          </select>
-        </div>
-
-        <!-- Country Filter -->
-        <div class="lg:col-span-2">
-          <label class="block text-sm font-medium text-gray-700 mb-2">País</label>
-          <select 
-            [(ngModel)]="filtros.pais"
-            (change)="aplicarFiltros()"
-            class="block w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-            <option value="">Todos</option>
-            <option *ngFor="let pais of paises" [value]="pais">{{ pais }}</option>
-          </select>
-        </div>
-
-        <!-- Unit Type Filter -->
-        <div class="lg:col-span-2">
-          <label class="block text-sm font-medium text-gray-700 mb-2">Tipo Unidad</label>
-          <select 
-            [(ngModel)]="filtros.tipoUnidad"
-            (change)="aplicarFiltros()"
-            class="block w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-            <option value="">Todos</option>
-            <option *ngFor="let tipo of tiposUnidad" [value]="tipo">{{ tipo }}</option>
-          </select>
-        </div>
-
       </div>
 
-      <!-- Advanced Filters Row -->
-      <div class="grid grid-cols-1 lg:grid-cols-6 gap-4 mt-4 pt-4 border-t border-gray-200">
-        
-        <!-- Stock Filter -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2">Stock</label>
-          <select 
-            [(ngModel)]="filtros.stock"
-            (change)="aplicarFiltros()"
-            class="block w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-            <option value="">Todos</option>
-            <option value="disponible">En Stock</option>
-            <option value="bajo">Stock Bajo</option>
-            <option value="agotado">Agotado</option>
-          </select>
-        </div>
+      <!-- Collapsible Filters Section -->
+      <div id="filtros-container" [class.hidden]="!filtrosAbiertos">
+        <div class="border-t border-gray-200 pt-4">
+          
+          <!-- First Row of Filters -->
+          <div class="grid grid-cols-1 lg:grid-cols-4 gap-4 mb-4">
+            
+            <!-- Provider Filter -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Proveedor</label>
+              <select 
+                id="proveedor"
+                [(ngModel)]="filtros.proveedor"
+                (change)="aplicarFiltros()"
+                class="block w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <option value="">Todos</option>
+                <option *ngFor="let proveedor of proveedores" [value]="proveedor">{{ proveedor }}</option>
+              </select>
+            </div>
 
-        <!-- Price Range -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2">Precio Mín.</label>
-          <input 
-            type="number" 
-            [(ngModel)]="filtros.precioMin"
-            (input)="aplicarFiltros()"
-            placeholder="0.00"
-            class="block w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-        </div>
+            <!-- Industry Filter -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Industria</label>
+              <select 
+                id="industria"
+                [(ngModel)]="filtros.industria"
+                (change)="aplicarFiltros()"
+                class="block w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <option value="">Todas</option>
+                <option *ngFor="let industria of industrias" [value]="industria">{{ industria }}</option>
+              </select>
+            </div>
 
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2">Precio Máx.</label>
-          <input 
-            type="number" 
-            [(ngModel)]="filtros.precioMax"
-            (input)="aplicarFiltros()"
-            placeholder="999.99"
-            class="block w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-        </div>
+            <!-- Country Filter -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">País</label>
+              <select 
+                id="pais"
+                [(ngModel)]="filtros.pais"
+                (change)="aplicarFiltros()"
+                class="block w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <option value="">Todos</option>
+                <option *ngFor="let pais of paises" [value]="pais">{{ pais }}</option>
+              </select>
+            </div>
 
-        <!-- Prescription Filter -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2">Prescripción</label>
-          <select 
-            [(ngModel)]="filtros.requiereReceta"
-            (change)="aplicarFiltros()"
-            class="block w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-            <option value="">Todos</option>
-            <option value="true">Con Receta</option>
-            <option value="false">Sin Receta</option>
-          </select>
-        </div>
+            <!-- Unit Type Filter -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Tipo Unidad</label>
+              <select 
+                id="tipoUnidad"
+                [(ngModel)]="filtros.tipoUnidad"
+                (change)="aplicarFiltros()"
+                class="block w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <option value="">Todos</option>
+                <option *ngFor="let tipo of tiposUnidad" [value]="tipo">{{ tipo }}</option>
+              </select>
+            </div>
 
-        <!-- Action Buttons -->
-        <div class="lg:col-span-2 flex items-end space-x-2">
-          <button 
-            (click)="limpiarFiltros()"
-            class="flex-1 px-4 py-2 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-200 transition-colors duration-200">
-            Limpiar
-          </button>
-          <button 
-            (click)="aplicarFiltros()"
-            class="flex-1 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors duration-200">
-            Aplicar
-          </button>
-        </div>
+          </div>
 
+          <!-- Second Row of Advanced Filters -->
+          <div class="grid grid-cols-1 lg:grid-cols-6 gap-4">
+            
+            <!-- Stock Filter -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Stock</label>
+              <select 
+                id="stock"
+                [(ngModel)]="filtros.stock"
+                (change)="aplicarFiltros()"
+                class="block w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <option value="">Todos</option>
+                <option value="disponible">En Stock</option>
+                <option value="bajo">Stock Bajo</option>
+                <option value="agotado">Agotado</option>
+              </select>
+            </div>
+
+            <!-- Price Range -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Precio Mín.</label>
+              <input 
+                type="number" 
+                id="precioMin"
+                [(ngModel)]="filtros.precioMin"
+                (input)="aplicarFiltros()"
+                placeholder="0.00"
+                class="block w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Precio Máx.</label>
+              <input 
+                type="number" 
+                id="precioMax"
+                [(ngModel)]="filtros.precioMax"
+                (input)="aplicarFiltros()"
+                placeholder="999.99"
+                class="block w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+            </div>
+
+            <!-- Prescription Filter -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Prescripción</label>
+              <select 
+                id="requiereReceta"
+                [(ngModel)]="filtros.requiereReceta"
+                (change)="aplicarFiltros()"
+                class="block w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <option value="">Todos</option>
+                <option value="true">Con Receta</option>
+                <option value="false">Sin Receta</option>
+              </select>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="lg:col-span-2 flex items-end space-x-2">
+              <button 
+                (click)="limpiarFiltros()"
+                class="flex-1 px-4 py-2 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-200 transition-colors duration-200">
+                Limpiar
+              </button>
+              <button 
+                (click)="aplicarFiltros()"
+                class="flex-1 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors duration-200">
+                Aplicar
+              </button>
+            </div>
+
+          </div>
+        </div>
       </div>
     </div>
 
     <!-- Results Summary -->
     <div class="flex items-center justify-between mb-4">
       <div class="text-sm text-gray-600">
-        Mostrando {{ medicamentosFiltrados.length }} de {{ medicamentos.length }} medicamentos
+        Mostrando <span id="resultados-count">{{ medicamentosFiltrados.length }}</span> medicamentos
       </div>
       <div class="flex items-center space-x-2">
         <label class="text-sm text-gray-600">Mostrar:</label>
         <select 
+          id="itemsPorPagina"
           [(ngModel)]="itemsPorPagina"
           (change)="cambiarPagina(1)"
           class="px-3 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -236,90 +275,46 @@
               <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
             </tr>
           </thead>
-          <tbody class="bg-white divide-y divide-gray-200">
-            <tr *ngFor="let medicamento of medicamentosPaginados; let i = index" 
-                class="hover:bg-gray-50 transition-colors duration-200">
-              
+          <tbody id="medicamentos-tabla" class="bg-white divide-y divide-gray-200">
+            <tr *ngFor="let medicamento of medicamentosPaginados" class="hover:bg-gray-50 transition-colors duration-200">
               <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                 {{ medicamento.codigo }}
               </td>
-              
               <td class="px-6 py-4 whitespace-nowrap">
                 <div>
                   <div class="text-sm font-medium text-gray-900">{{ medicamento.nombre }}</div>
                   <div class="text-sm text-gray-500">{{ medicamento.principioActivo }}</div>
                 </div>
               </td>
-              
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                {{ medicamento.proveedor }}
-              </td>
-              
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                {{ medicamento.industria }}
-              </td>
-              
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ medicamento.proveedor }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ medicamento.industria }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ medicamento.paisProcedencia }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ medicamento.capacidad }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ medicamento.dosis }}</td>
               <td class="px-6 py-4 whitespace-nowrap">
-                <div class="flex items-center">
-                  <span class="text-sm text-gray-900">{{ medicamento.paisProcedencia }}</span>
-                </div>
-              </td>
-              
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                {{ medicamento.capacidad }}
-              </td>
-              
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                {{ medicamento.dosis }}
-              </td>
-              
-              <td class="px-6 py-4 whitespace-nowrap">
-                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
-                      [ngClass]="{
-                        'bg-blue-100 text-blue-800': medicamento.tipoUnidad === 'Tabletas',
-                        'bg-green-100 text-green-800': medicamento.tipoUnidad === 'ml',
-                        'bg-purple-100 text-purple-800': medicamento.tipoUnidad === 'Cápsulas',
-                        'bg-orange-100 text-orange-800': medicamento.tipoUnidad === 'Ampolla',
-                        'bg-gray-100 text-gray-800': !['Tabletas', 'ml', 'Cápsulas', 'Ampolla'].includes(medicamento.tipoUnidad)
-                      }">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium" 
+                      [ngClass]="getTipoUnidadClass(medicamento.tipoUnidad)">
                   {{ medicamento.tipoUnidad }}
                 </span>
               </td>
-              
               <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-green-600">
                 ${{ medicamento.precio | number:'1.2-2' }}
               </td>
-              
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                <span [ngClass]="{
-                  'text-red-600 font-medium': medicamento.stock === 0,
-                  'text-orange-600 font-medium': medicamento.stock > 0 && medicamento.stock <= 10,
-                  'text-green-600': medicamento.stock > 10
-                }">
-                  {{ medicamento.stock }}
-                </span>
+              <td class="px-6 py-4 whitespace-nowrap text-sm" [ngClass]="getStockClass(medicamento.stock)">
+                {{ medicamento.stock }}
               </td>
-              
               <td class="px-6 py-4 whitespace-nowrap">
-                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
-                      [ngClass]="{
-                        'bg-green-100 text-green-800': medicamento.stock > 10,
-                        'bg-yellow-100 text-yellow-800': medicamento.stock > 0 && medicamento.stock <= 10,
-                        'bg-red-100 text-red-800': medicamento.stock === 0
-                      }">
-                  {{ medicamento.stock > 10 ? 'Disponible' : medicamento.stock > 0 ? 'Stock Bajo' : 'Agotado' }}
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium" 
+                      [ngClass]="getEstadoClass(medicamento.stock)">
+                  {{ getEstadoText(medicamento.stock) }}
                 </span>
                 <div class="mt-1">
-                  <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium"
-                        [ngClass]="{
-                          'bg-red-100 text-red-700': medicamento.requiereReceta,
-                          'bg-green-100 text-green-700': !medicamento.requiereReceta
-                        }">
+                  <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium" 
+                        [ngClass]="getRecetaClass(medicamento.requiereReceta)">
                     {{ medicamento.requiereReceta ? 'Con Receta' : 'Sin Receta' }}
                   </span>
                 </div>
               </td>
-              
               <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                 <div class="flex items-center justify-end space-x-2">
                   <button 
@@ -359,12 +354,14 @@
         <div class="flex-1 flex justify-between sm:hidden">
           <button 
             (click)="paginaAnterior()"
+            id="prev-mobile"
             [disabled]="paginaActual === 1"
             class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
             Anterior
           </button>
           <button 
             (click)="paginaSiguiente()"
+            id="next-mobile"
             [disabled]="paginaActual === totalPaginas"
             class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
             Siguiente
@@ -372,18 +369,14 @@
         </div>
         <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
           <div>
-            <p class="text-sm text-gray-700">
-              Mostrando
-              <span class="font-medium">{{ (paginaActual - 1) * itemsPorPagina + 1 }}</span>
-              a
-              <span class="font-medium">{{ Math.min(paginaActual * itemsPorPagina, medicamentosFiltrados.length) }}</span>
-              de
-              <span class="font-medium">{{ medicamentosFiltrados.length }}</span>
-              resultados
+            <p class="text-sm text-gray-700" id="pagination-info">
+              Mostrando <span class="font-medium">{{ (paginaActual - 1) * itemsPorPagina + 1 }}</span> a 
+              <span class="font-medium">{{ Math.min(paginaActual * itemsPorPagina, medicamentosFiltrados.length) }}</span> de 
+              <span class="font-medium">{{ medicamentosFiltrados.length }}</span> resultados
             </p>
           </div>
           <div>
-            <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+            <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" id="pagination-nav">
               <button 
                 (click)="paginaAnterior()"
                 [disabled]="paginaActual === 1"
@@ -394,12 +387,15 @@
               </button>
               
               <button *ngFor="let pagina of getPaginas()"
-                      (click)="cambiarPagina(pagina)"
-                      [ngClass]="{
-                        'bg-blue-50 border-blue-500 text-blue-600': pagina === paginaActual,
-                        'bg-white border-gray-300 text-gray-500 hover:bg-gray-50': pagina !== paginaActual
-                      }"
-                      class="relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                (click)="cambiarPagina(pagina)"
+                class="relative inline-flex items-center px-4 py-2 border text-sm font-medium"
+                [class.bg-blue-50]="pagina === paginaActual"
+                [class.border-blue-500]="pagina === paginaActual"
+                [class.text-blue-600]="pagina === paginaActual"
+                [class.bg-white]="pagina !== paginaActual"
+                [class.border-gray-300]="pagina !== paginaActual"
+                [class.text-gray-500]="pagina !== paginaActual"
+                [class.hover:bg-gray-50]="pagina !== paginaActual">
                 {{ pagina }}
               </button>
               

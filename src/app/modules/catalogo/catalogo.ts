@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DecimalPipe } from '@angular/common';
-import { Route, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 // Interface para medicamento
 interface Medicamento {
@@ -45,7 +45,6 @@ interface FiltrosCatalogo {
   templateUrl: './catalogo.html',
 })
 export class CatalogoComponent implements OnInit {
-
   // Propiedades para filtros
   filtros: FiltrosCatalogo = {
     busqueda: '',
@@ -58,6 +57,8 @@ export class CatalogoComponent implements OnInit {
     precioMax: null,
     requiereReceta: ''
   };
+  
+  filtrosAbiertos: boolean = false;
   
   constructor(private router: Router) {}
 
@@ -270,8 +271,6 @@ export class CatalogoComponent implements OnInit {
   // Acceso a Math para el template
   Math = Math;
 
-  
-
   ngOnInit(): void {
     this.medicamentosFiltrados = [...this.medicamentos];
     this.calcularPaginacion();
@@ -337,6 +336,10 @@ export class CatalogoComponent implements OnInit {
       requiereReceta: ''
     };
     this.aplicarFiltros();
+  }
+
+  toggleFiltros(): void {
+    this.filtrosAbiertos = !this.filtrosAbiertos;
   }
 
   // Métodos de ordenamiento
@@ -413,6 +416,62 @@ export class CatalogoComponent implements OnInit {
     }
     
     return paginas;
+  }
+
+  // Métodos de utilidad para estilos
+  getTipoUnidadClass(tipoUnidad: string): string {
+    const clases: {[key: string]: string} = {
+      'Tabletas': 'bg-blue-100 text-blue-800',
+      'Cápsulas': 'bg-purple-100 text-purple-800',
+      'ml': 'bg-green-100 text-green-800',
+      'mg': 'bg-yellow-100 text-yellow-800',
+      'Ampolla': 'bg-red-100 text-red-800',
+      'Vial': 'bg-indigo-100 text-indigo-800',
+      'Sobres': 'bg-pink-100 text-pink-800',
+      'Gotas': 'bg-teal-100 text-teal-800',
+      'Crema': 'bg-orange-100 text-orange-800',
+      'Jarabe': 'bg-cyan-100 text-cyan-800',
+      'Inyección': 'bg-rose-100 text-rose-800',
+      'Parches': 'bg-amber-100 text-amber-800'
+    };
+    
+    return clases[tipoUnidad] || 'bg-gray-100 text-gray-800';
+  }
+
+  getStockClass(stock: number): string {
+    if (stock === 0) {
+      return 'text-red-600 font-medium';
+    } else if (stock <= 10) {
+      return 'text-yellow-600 font-medium';
+    } else {
+      return 'text-green-600';
+    }
+  }
+
+  getEstadoClass(stock: number): string {
+    if (stock === 0) {
+      return 'bg-red-100 text-red-800';
+    } else if (stock <= 10) {
+      return 'bg-yellow-100 text-yellow-800';
+    } else {
+      return 'bg-green-100 text-green-800';
+    }
+  }
+
+  getEstadoText(stock: number): string {
+    if (stock === 0) {
+      return 'Agotado';
+    } else if (stock <= 10) {
+      return 'Stock Bajo';
+    } else {
+      return 'Disponible';
+    }
+  }
+
+  getRecetaClass(requiereReceta: boolean): string {
+    return requiereReceta 
+      ? 'bg-purple-100 text-purple-800' 
+      : 'bg-gray-100 text-gray-800';
   }
 
   // Métodos de acciones
