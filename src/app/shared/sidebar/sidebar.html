@@ -1,0 +1,84 @@
+<!-- sidebar.component.html -->
+<div class="sidebar-container" [class.collapsed]="isCollapsed">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <!-- Header del Sidebar -->
+    <div class="sidebar-header">
+      <div class="logo" [class.collapsed]="isCollapsed">
+        <span class="logo-icon">🏪</span>
+        <span class="logo-text" *ngIf="!isCollapsed">Mi Tienda</span>
+      </div>
+      <button 
+        class="toggle-btn" 
+        (click)="toggleSidebar()"
+        [title]="isCollapsed ? 'Expandir' : 'Contraer'">
+        <span [innerHTML]="isCollapsed ? '→' : '←'"></span>
+      </button>
+    </div>
+
+    <!-- Información del Usuario -->
+    <div class="user-info" *ngIf="!isCollapsed">
+      <div class="user-avatar">
+        <div class="avatar-circle">
+          {{ getUserName().charAt(0) }}
+        </div>
+      </div>
+      <div class="user-details">
+        <p class="user-name">{{ getUserName() }}</p>
+        <p class="user-role">{{ getUserRole() }}</p>
+      </div>
+    </div>
+
+    <!-- Menú de Navegación -->
+    <nav class="sidebar-nav">
+      <ul class="nav-list">
+        <li 
+          *ngFor="let item of menuItems" 
+          class="nav-item"
+          [class.hidden]="!isMenuItemVisible(item)">
+          
+          <a 
+            [routerLink]="item.route"
+            class="nav-link"
+            [class.active]="isActive(item.route)"
+            [title]="isCollapsed ? item.label : ''">
+            
+            <span class="nav-icon">{{ item.icon }}</span>
+            <span class="nav-text" *ngIf="!isCollapsed">{{ item.label }}</span>
+            
+            <!-- Indicador activo -->
+            <div class="active-indicator" *ngIf="isActive(item.route)"></div>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Separador -->
+    <div class="sidebar-separator"></div>
+
+    <!-- Botones de Acción -->
+    <div class="sidebar-actions">
+      <button 
+        class="action-btn help-btn"
+        [title]="isCollapsed ? 'Ayuda' : ''">
+        <span class="action-icon">❓</span>
+        <span class="action-text" *ngIf="!isCollapsed">Ayuda</span>
+      </button>
+      
+      <button 
+        class="action-btn logout-btn"
+        (click)="logout()"
+        [title]="isCollapsed ? 'Cerrar Sesión' : ''">
+        <span class="action-icon">🚪</span>
+        <span class="action-text" *ngIf="!isCollapsed">Cerrar Sesión</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Overlay para móvil -->
+  <div 
+    class="sidebar-overlay" 
+    [class.show]="!isCollapsed"
+    (click)="isCollapsed = true">
+  </div>
+</div>

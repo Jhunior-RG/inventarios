@@ -1,5 +1,10 @@
-<nav>
-  <a routerLink="/">Inicio</a>
-  <a routerLink="/login">Login</a>
-</nav>
-<router-outlet></router-outlet>
+<!-- app.component.html -->
+<div class="app-container">
+  <!-- Sidebar (solo mostrar si no es la página de login) -->
+  <app-sidebar *ngIf="!isLoginPage()"></app-sidebar>
+  
+  <!-- Contenido principal -->
+  <main class="main-content" [class.with-sidebar]="!isLoginPage()" [class.sidebar-collapsed]="sidebarCollapsed">
+    <router-outlet></router-outlet>
+  </main>
+</div>

@@ -1,16 +1,39 @@
-import { Component, signal } from '@angular/core';
-import { RouterLink, RouterOutlet } from '@angular/router';
-import { LucideAngularModule, PenIcon } from "lucide-angular";
+// app.component.ts
+import { Component, OnInit } from '@angular/core';
+import { Router, NavigationEnd } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+
+import { filter } from 'rxjs/operators';
+import { SidebarComponent } from './shared/sidebar/sidebar';
 
 @Component({
-  standalone: true,
   selector: 'app-root',
-  imports: [LucideAngularModule, RouterOutlet,RouterLink],
+  standalone: true,
+  imports: [CommonModule, RouterModule, SidebarComponent],
   templateUrl: './app.html',
-  styleUrl: './app.css',
+  styleUrls: ['./app.css']
 })
+export class App implements OnInit {
+  title = 'mi-tienda';
+  currentRoute = '';
+  sidebarCollapsed = false;
 
-export class App {
-  readonly PenIcon = PenIcon;
-  protected readonly title = signal('inventarios');
+  constructor(private router: Router) { }
+
+  ngOnInit(): void {
+    this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe((event: NavigationEnd) => {
+        this.currentRoute = event.url;
+      });
+  }
+
+  isLoginPage(): boolean {
+    return this.currentRoute === '/' || this.currentRoute === '/login';
+  }
+
+  onSidebarToggle(collapsed: boolean): void {
+    this.sidebarCollapsed = collapsed;
+  }
 }
