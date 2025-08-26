@@ -21,7 +21,6 @@ interface MenuItem {
 })
 export class SidebarComponent implements OnInit {
   
-  isCollapsed = false;
   currentRoute = '';
   userRole = 'admin'; // Esto vendría de tu servicio de autenticación
   
@@ -78,9 +77,6 @@ export class SidebarComponent implements OnInit {
       });
   }
 
-  toggleSidebar(): void {
-    this.isCollapsed = !this.isCollapsed;
-  }
 
   isMenuItemVisible(item: MenuItem): boolean {
     return !item.roles || item.roles.includes(this.userRole);
