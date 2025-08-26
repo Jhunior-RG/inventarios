@@ -23,7 +23,7 @@ export class LoginComponent {
 
   constructor(private fb: FormBuilder, private router: Router) {
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
+      email: ['', [Validators.required, Validators.minLength(3)]],
       password: ['', [Validators.required, Validators.minLength(4)]],
     });
   }
@@ -46,7 +46,7 @@ export class LoginComponent {
       await new Promise((resolve) => setTimeout(resolve, 1500));
       const { email, password } = this.loginForm.value;
 
-      console.log('Email:', email);
+      console.log('Usuario:', email);
       console.log('Password:', password);
 
       // Simulación de validación de credenciales
@@ -60,7 +60,7 @@ export class LoginComponent {
 
       // Guardar información del usuario (en un caso real, usar un servicio)
       localStorage.setItem('userRole', role);
-      localStorage.setItem('userEmail', email);
+      localStorage.setItem('userName', email);
 
       // Redirección según rol
       if (role === 'admin') {
@@ -79,9 +79,8 @@ export class LoginComponent {
   private determineUserRole(email: string, password: string): string | null {
     // Simulación simple de usuarios (reemplazar por API real)
     const users = [
-      { email: 'admin@farmapro.com', password: 'admin123', role: 'admin' },
-      { email: 'cajero@farmapro.com', password: 'cajero123', role: 'cajero' },
-      { email: 'test@test.com', password: '1234', role: 'cajero' },
+      { email: 'admin', password: 'admin', role: 'admin' },
+      { email: 'cajero', password: 'cajero', role: 'cajero' },
     ];
 
     const user = users.find(
@@ -102,7 +101,6 @@ export class LoginComponent {
     if (field?.errors && field?.touched) {
       if (field.errors['required'])
         return `${this.getFieldLabel(fieldName)} es requerido`;
-      if (field.errors['email']) return 'Ingrese un email válido';
       if (field.errors['minlength'])
         return `Mínimo ${field.errors['minlength'].requiredLength} caracteres`;
     }
@@ -111,7 +109,7 @@ export class LoginComponent {
 
   private getFieldLabel(fieldName: string): string {
     const labels: { [key: string]: string } = {
-      email: 'Email',
+      email: 'Usuario',
       password: 'Contraseña',
     };
     return labels[fieldName] || fieldName;
