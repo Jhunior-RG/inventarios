@@ -5,8 +5,7 @@
     <!-- Header del Sidebar -->
     <div class="sidebar-header">
       <div class="logo" >
-        <span class="logo-icon">🏪</span>
-        <span class="logo-text">Mi Tienda</span>
+        <span class="logo-text">FARMAPRO</span>
       </div>
 
     </div>
@@ -38,7 +37,7 @@
             [class.active]="isActive(item.route)"
             [title]="''">
             
-            <span class="nav-icon">{{ item.icon }}</span>
+            <span class="nav-icon"  [innerHTML]="item.icon"></span>
             <span class="nav-text" >{{ item.label }}</span>
             
             <!-- Indicador activo -->
@@ -56,7 +55,7 @@
       <button 
         class="action-btn help-btn"
         [title]=" 'Ayuda' ">
-        <span class="action-icon">❓</span>
+        
         <span class="action-text" >Ayuda</span>
       </button>
       
@@ -64,7 +63,7 @@
         class="action-btn logout-btn"
         (click)="logout()"
         [title]="'Cerrar Sesión'">
-        <span class="action-icon">🚪</span>
+        
         <span class="action-text">Cerrar Sesión</span>
       </button>
     </div>
