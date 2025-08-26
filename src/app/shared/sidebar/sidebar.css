@@ -1,0 +1,368 @@
+/* sidebar.component.css */
+
+.sidebar-container {
+  position: relative;
+  height: 100vh;
+  z-index: 1000;
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 280px;
+  background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 1001;
+}
+
+.sidebar-container.collapsed .sidebar {
+  width: 80px;
+}
+
+/* Header del Sidebar */
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  min-height: 80px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  transition: all 0.3s ease;
+}
+
+.logo.collapsed {
+  justify-content: center;
+}
+
+.logo-icon {
+  font-size: 2rem;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.logo-text {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: white;
+  white-space: nowrap;
+}
+
+.toggle-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 1rem;
+}
+
+.toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+}
+
+/* Información del Usuario */
+.user-info {
+  padding: 1.5rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  animation: fadeIn 0.3s ease;
+}
+
+.user-avatar {
+  flex-shrink: 0;
+}
+
+.avatar-circle {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  font-size: 1.2rem;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.user-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.user-name {
+  color: white;
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin: 0 0 0.25rem 0;
+  truncate: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.user-role {
+  color: #94a3b8;
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+/* Navegación */
+.sidebar-nav {
+  flex: 1;
+  padding: 1rem 0;
+  overflow-y: auto;
+}
+
+.nav-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-item {
+  margin-bottom: 0.25rem;
+  position: relative;
+}
+
+.nav-item.hidden {
+  display: none;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  padding: 0.875rem 1rem;
+  color: #cbd5e1;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  position: relative;
+  gap: 1rem;
+  border-radius: 0;
+  margin: 0 0.5rem;
+  border-radius: 12px;
+}
+
+.nav-link:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  transform: translateX(4px);
+}
+
+.nav-link.active {
+  background: linear-gradient(90deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0.05));
+  color: #60a5fa;
+  font-weight: 600;
+}
+
+.nav-icon {
+  font-size: 1.25rem;
+  flex-shrink: 0;
+  width: 24px;
+  text-align: center;
+}
+
+.nav-text {
+  font-size: 0.9rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.active-indicator {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 24px;
+  background: #3b82f6;
+  border-radius: 0 4px 4px 0;
+}
+
+/* Separador */
+.sidebar-separator {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 1rem 1rem;
+}
+
+/* Acciones del Sidebar */
+.sidebar-actions {
+  padding: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.action-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.875rem 1rem;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #cbd5e1;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.action-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.action-btn:last-child {
+  margin-bottom: 0;
+}
+
+.logout-btn:hover {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: #fca5a5;
+}
+
+.action-icon {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.action-text {
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Overlay para móvil */
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  z-index: 999;
+}
+
+.sidebar-overlay.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+  
+  .sidebar-container:not(.collapsed) .sidebar {
+    transform: translateX(0);
+  }
+  
+  .toggle-btn {
+    display: none;
+  }
+}
+
+@media (max-width: 1024px) {
+  .sidebar {
+    width: 260px;
+  }
+  
+  .sidebar-container.collapsed .sidebar {
+    width: 70px;
+  }
+}
+
+/* Scrollbar personalizado */
+.sidebar-nav::-webkit-scrollbar {
+  width: 4px;
+}
+
+.sidebar-nav::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar-nav::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
+.sidebar-nav::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Estados de carga */
+.nav-link.loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Tooltip para modo colapsado */
+.sidebar-container.collapsed .nav-link,
+.sidebar-container.collapsed .action-btn {
+  position: relative;
+}
+
+.sidebar-container.collapsed .nav-link::after,
+.sidebar-container.collapsed .action-btn::after {
+  content: attr(title);
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #1f2937;
+  color: white;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+  z-index: 1002;
+  margin-left: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.sidebar-container.collapsed .nav-link:hover::after,
+.sidebar-container.collapsed .action-btn:hover::after {
+  opacity: 1;
+  visibility: visible;
+}
