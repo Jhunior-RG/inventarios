@@ -129,7 +129,7 @@ export class Admin implements OnInit, AfterViewInit, OnDestroy {
         this.productosChart = new Chart(ctx, {
           type: 'bar',
           data: {
-            labels: ['Laptop', 'Mouse', 'Teclado', 'Monitor', 'Auriculares'],
+            labels: ['Paracetamol', 'Amoxilina', 'Ibuprofeno', 'Insulina Glargina', 'Omeprazol'],
             datasets: [{
               label: 'Unidades Vendidas',
               data: [120, 190, 300, 50, 200],
