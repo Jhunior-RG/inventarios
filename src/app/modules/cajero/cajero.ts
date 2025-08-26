@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./cajero.css']
 })
 export class Cajero implements OnInit {
-  nombreCajero: string = 'Juan Pérez';
+  nombreCajero: string = 'Pablo Hans';
   fechaActual: Date = new Date();
   ventasDelDia: number = 12;
   totalVendidoDia: number = 15750.50;

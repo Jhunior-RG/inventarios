@@ -5,10 +5,11 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
+
 interface MenuItem {
   label: string;
   route: string;
-  icon: string;
+  icon?: string;
   roles?: string[];
 }
 
@@ -20,55 +21,53 @@ interface MenuItem {
   styleUrls: ['./sidebar.css']
 })
 export class SidebarComponent implements OnInit {
-  
+
   currentRoute = '';
   userRole = 'admin'; // Esto vendría de tu servicio de autenticación
-  
+
   menuItems: MenuItem[] = [
     {
       label: 'Dashboard',
       route: '/admin',
-      icon: '📊',
+      icon: `<i class="pi pi-chart-line" style="font-size: 2.5rem"></i>`,
+
       roles: ['admin']
-    },
-    {
-      label: 'Caja',
-      route: '/cajero',
-      icon: '💰',
-      roles: ['cajero', 'admin']
     },
     {
       label: 'Usuarios',
       route: '/usuarios',
-      icon: '👥',
+      icon: `<i class="pi pi-user" style="font-size: 2.5rem"></i>`,
       roles: ['admin']
     },
     {
-      label: 'Productos',
+      label: 'Farmacos',
       route: '/productos',
-      icon: '📦',
+      icon: `<i class="pi pi-list-check" style="font-size: 2.5rem"></i>`,
+
       roles: ['admin', 'cajero']
     },
     {
       label: 'Reportes',
       route: '/reportes',
-      icon: '📈',
+
+      icon: `<i class="pi pi-file-export" style="font-size: 2.5rem"></i>`,
       roles: ['admin']
     },
     {
       label: 'Configuración',
       route: '/configuracion',
-      icon: '⚙️',
+      icon: `<i class="pi pi-cog" style="font-size: 2.5rem"></i>`,
+
       roles: ['admin']
     }
   ];
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) { }
 
   ngOnInit(): void {
     // Obtener la ruta actual
     this.currentRoute = this.router.url;
-    
+
     // Escuchar cambios de ruta
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
@@ -94,7 +93,7 @@ export class SidebarComponent implements OnInit {
 
   getUserName(): string {
     // Esto vendría de tu servicio de usuario
-    return 'Juan Pérez';
+    return 'Pablo Hans';
   }
 
   getUserRole(): string {
