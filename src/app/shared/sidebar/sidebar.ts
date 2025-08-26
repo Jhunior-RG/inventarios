@@ -42,7 +42,7 @@ export class SidebarComponent implements OnInit {
     {
       label: 'Farmacos',
       route: '/productos',
-      icon: `<i class="pi pi-list-check" style="font-size: 2.5rem"></i>`,
+      icon: `<i class="pi pi-box" style="font-size: 2.5rem"></i>`,
 
       roles: ['admin', 'cajero']
     },
